@@ -55,7 +55,7 @@ docker compose ps
 
 ### 5. Acceder a la aplicación
 
-- App: [http://localhost:5000](http://localhost:5000)
+- App: [http://localhost:5000](http://localhost:5001)
 - Consola RabbitMQ: [http://localhost:15672](http://localhost:15672) (guest / guest)
 
 ### 6. Detener
