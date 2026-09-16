@@ -16,7 +16,7 @@ Construida con Flask (Python), contenedores Docker y servicios de AWS Academy.
 
 | Servicio | Tecnología | Puerto |
 |---|---|---|
-| API Flask | Python 3.12 + Gunicorn | 5000 |
+| API Flask | Python 3.12 + Gunicorn | 5001 |
 | Worker de recordatorios | Python 3.12 + pika | — |
 | Cola de mensajes | RabbitMQ 3.13 | 5672 / 15672 |
 
