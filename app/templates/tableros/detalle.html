@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{{ tablero.nombre }} — TaskBoard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <a href="{{ url_for('tableros.index') }}" class="text-muted small">← Mis tableros</a>
+    <h1>{{ tablero.nombre }}</h1>
+    {% if tablero.descripcion %}
+      <p class="text-muted">{{ tablero.descripcion }}</p>
+    {% endif %}
+  </div>
+  <a href="{{ url_for('tarjetas.nueva', tablero_id=tablero.id) }}"
+     class="btn btn-primary">+ Nueva tarjeta</a>
+</div>
+
+{% set estados = ['pendiente', 'en_progreso', 'completada'] %}
+{% set etiquetas = {'pendiente': 'Pendiente', 'en_progreso': 'En progreso', 'completada': 'Completada'} %}
+
+<div class="row g-3">
+  {% for estado in estados %}
+    <div class="col-md-4">
+      <h5 class="text-uppercase small fw-bold text-muted mb-2">
+        {{ etiquetas[estado] }}
+        <span class="badge bg-secondary ms-1">
+          {{ tablero.tarjetas | selectattr('estado', 'equalto', estado) | list | length }}
+        </span>
+      </h5>
+      {% for tarjeta in tablero.tarjetas | selectattr('estado', 'equalto', estado) %}
+        <div class="card mb-2">
+          <div class="card-body py-2 px-3">
+            <div class="d-flex justify-content-between align-items-start">
+              <a href="{{ url_for('tarjetas.detalle', tablero_id=tablero.id, tarjeta_id=tarjeta.id) }}"
+                 class="text-decoration-none text-dark fw-semibold">
+                {{ tarjeta.titulo }}
+              </a>
+              {% if tarjeta.prioridad == 'alta' %}
+                <span class="badge bg-danger">Alta</span>
+              {% elif tarjeta.prioridad == 'media' %}
+                <span class="badge bg-warning text-dark">Media</span>
+              {% else %}
+                <span class="badge bg-secondary">Baja</span>
+              {% endif %}
+            </div>
+            {% if tarjeta.fecha_limite %}
+              <small class="text-muted">
+                📅 {{ tarjeta.fecha_limite.strftime('%d/%m/%Y %H:%M') }}
+              </small>
+            {% endif %}
+            {% if tarjeta.asignaciones %}
+              <div class="mt-1">
+                {% for asig in tarjeta.asignaciones %}
+                  <span class="badge bg-light text-dark border">{{ asig.usuario.nombre }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <p class="text-muted small">Sin tarjetas</p>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

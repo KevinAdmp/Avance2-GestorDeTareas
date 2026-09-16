@@ -1,0 +1,132 @@
+app/app.py:44:24: E272 multiple spaces before keyword
+app/app.py:45:22: E272 multiple spaces before keyword
+app/config.py:13:12: E221 multiple spaces before operator
+app/config.py:14:12: E221 multiple spaces before operator
+app/config.py:15:12: E221 multiple spaces before operator
+app/config.py:16:12: E221 multiple spaces before operator
+app/config.py:33:15: E221 multiple spaces before operator
+app/config.py:34:22: E221 multiple spaces before operator
+app/config.py:36:22: E221 multiple spaces before operator
+app/config.py:37:14: E221 multiple spaces before operator
+app/config.py:40:17: E221 multiple spaces before operator
+app/config.py:41:15: E221 multiple spaces before operator
+app/config.py:42:1: E305 expected 2 blank lines after class or function definition, found 0
+app/models.py:14:7: E221 multiple spaces before operator
+app/models.py:15:11: E221 multiple spaces before operator
+app/models.py:16:10: E221 multiple spaces before operator
+app/models.py:18:14: E221 multiple spaces before operator
+app/models.py:21:13: E221 multiple spaces before operator
+app/models.py:38:7: E221 multiple spaces before operator
+app/models.py:39:11: E221 multiple spaces before operator
+app/models.py:40:16: E221 multiple spaces before operator
+app/models.py:42:14: E221 multiple spaces before operator
+app/models.py:54:7: E221 multiple spaces before operator
+app/models.py:55:11: E221 multiple spaces before operator
+app/models.py:56:16: E221 multiple spaces before operator
+app/models.py:57:11: E221 multiple spaces before operator
+app/models.py:58:14: E221 multiple spaces before operator
+app/models.py:60:15: E221 multiple spaces before operator
+app/models.py:61:15: E221 multiple spaces before operator
+app/models.py:62:14: E221 multiple spaces before operator
+app/models.py:74:7: E221 multiple spaces before operator
+app/models.py:75:15: E221 multiple spaces before operator
+app/models.py:76:15: E221 multiple spaces before operator
+app/queue_client.py:14:11: E221 multiple spaces before operator
+app/queue_client.py:18:28: E127 continuation line over-indented for visual indent
+app/queue_client.py:30:15: E221 multiple spaces before operator
+app/queue_client.py:32:16: E221 multiple spaces before operator
+app/routes/auth.py:18:15: E221 multiple spaces before operator
+app/routes/auth.py:19:14: E221 multiple spaces before operator
+app/routes/auth.py:49:14: E221 multiple spaces before operator
+app/routes/auth.py:51:16: E221 multiple spaces before operator
+app/routes/tableros.py:24:15: E221 multiple spaces before operator
+app/routes/tarjetas.py:8:1: F401 'flask.current_app' imported but unused
+app/routes/tarjetas.py:33:15: E221 multiple spaces before operator
+app/routes/tarjetas.py:34:20: E221 multiple spaces before operator
+app/routes/tarjetas.py:35:15: E221 multiple spaces before operator
+app/routes/tarjetas.py:36:18: E221 multiple spaces before operator
+app/routes/tarjetas.py:37:18: E221 multiple spaces before operator
+app/routes/tarjetas.py:133:23: E221 multiple spaces before operator
+app/routes/tarjetas.py:135:23: E221 multiple spaces before operator
+app/routes/tarjetas.py:136:26: E221 multiple spaces before operator
+app/routes/tarjetas.py:137:18: E221 multiple spaces before operator
+app/worker/worker.py:30:13: E221 multiple spaces before operator
+app/worker/worker.py:31:11: E221 multiple spaces before operator
+app/worker/worker.py:50:15: E221 multiple spaces before operator
+app/worker/worker.py:51:11: E221 multiple spaces before operator
+app/worker/worker.py:53:13: E221 multiple spaces before operator
+app/worker/worker.py:89:19: E221 multiple spaces before operator
+app/worker/worker.py:91:20: E221 multiple spaces before operator
+1     E127 continuation line over-indented for visual indent
+54    E221 multiple spaces before operator
+2     E272 multiple spaces before keyword
+1     E305 expected 2 blank lines after class or function definition, found 0
+1     F401 'flask.current_app' imported but unused
+app/app.py:44:24: E272 multiple spaces before keyword
+app/app.py:45:22: E272 multiple spaces before keyword
+app/config.py:13:12: E221 multiple spaces before operator
+app/config.py:14:12: E221 multiple spaces before operator
+app/config.py:15:12: E221 multiple spaces before operator
+app/config.py:16:12: E221 multiple spaces before operator
+app/config.py:33:15: E221 multiple spaces before operator
+app/config.py:34:22: E221 multiple spaces before operator
+app/config.py:36:22: E221 multiple spaces before operator
+app/config.py:37:14: E221 multiple spaces before operator
+app/config.py:40:17: E221 multiple spaces before operator
+app/config.py:41:15: E221 multiple spaces before operator
+app/config.py:42:1: E305 expected 2 blank lines after class or function definition, found 0
+app/models.py:14:7: E221 multiple spaces before operator
+app/models.py:15:11: E221 multiple spaces before operator
+app/models.py:16:10: E221 multiple spaces before operator
+app/models.py:18:14: E221 multiple spaces before operator
+app/models.py:21:13: E221 multiple spaces before operator
+app/models.py:38:7: E221 multiple spaces before operator
+app/models.py:39:11: E221 multiple spaces before operator
+app/models.py:40:16: E221 multiple spaces before operator
+app/models.py:42:14: E221 multiple spaces before operator
+app/models.py:54:7: E221 multiple spaces before operator
+app/models.py:55:11: E221 multiple spaces before operator
+app/models.py:56:16: E221 multiple spaces before operator
+app/models.py:57:11: E221 multiple spaces before operator
+app/models.py:58:14: E221 multiple spaces before operator
+app/models.py:60:15: E221 multiple spaces before operator
+app/models.py:61:15: E221 multiple spaces before operator
+app/models.py:62:14: E221 multiple spaces before operator
+app/models.py:74:7: E221 multiple spaces before operator
+app/models.py:75:15: E221 multiple spaces before operator
+app/models.py:76:15: E221 multiple spaces before operator
+app/queue_client.py:14:11: E221 multiple spaces before operator
+app/queue_client.py:18:28: E127 continuation line over-indented for visual indent
+app/queue_client.py:30:15: E221 multiple spaces before operator
+app/queue_client.py:32:16: E221 multiple spaces before operator
+app/routes/auth.py:18:15: E221 multiple spaces before operator
+app/routes/auth.py:19:14: E221 multiple spaces before operator
+app/routes/auth.py:49:14: E221 multiple spaces before operator
+app/routes/auth.py:51:16: E221 multiple spaces before operator
+app/routes/tableros.py:24:15: E221 multiple spaces before operator
+app/routes/tarjetas.py:8:1: F401 'flask.current_app' imported but unused
+app/routes/tarjetas.py:33:15: E221 multiple spaces before operator
+app/routes/tarjetas.py:34:20: E221 multiple spaces before operator
+app/routes/tarjetas.py:35:15: E221 multiple spaces before operator
+app/routes/tarjetas.py:36:18: E221 multiple spaces before operator
+app/routes/tarjetas.py:37:18: E221 multiple spaces before operator
+app/routes/tarjetas.py:133:23: E221 multiple spaces before operator
+app/routes/tarjetas.py:135:23: E221 multiple spaces before operator
+app/routes/tarjetas.py:136:26: E221 multiple spaces before operator
+app/routes/tarjetas.py:137:18: E221 multiple spaces before operator
+app/worker/worker.py:30:13: E221 multiple spaces before operator
+app/worker/worker.py:31:11: E221 multiple spaces before operator
+app/worker/worker.py:50:15: E221 multiple spaces before operator
+app/worker/worker.py:51:11: E221 multiple spaces before operator
+app/worker/worker.py:53:13: E221 multiple spaces before operator
+app/worker/worker.py:89:19: E221 multiple spaces before operator
+app/worker/worker.py:91:20: E221 multiple spaces before operator
+1     E127 continuation line over-indented for visual indent
+54    E221 multiple spaces before operator
+2     E272 multiple spaces before keyword
+1     E305 expected 2 blank lines after class or function definition, found 0
+1     F401 'flask.current_app' imported but unused
+app/config.py:42:1: E305 expected 2 blank lines after class or function definition, found 0
+1     E305 expected 2 blank lines after class or function definition, found 0
+app/config.py:42:1: E305 expected 2 blank lines after class or function definition, found 0
+1     E305 expected 2 blank lines after class or function definition, found 0

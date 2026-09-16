@@ -1,0 +1,44 @@
+# ── Imagen base: versión fija, slim ─────────────────────────────────────────
+FROM python:3.12.4-slim
+
+LABEL maintainer="kevin.morales@tecmilenio.mx"
+LABEL description="Worker RabbitMQ — Recordatorios de tareas"
+
+# ── Variables de entorno ──────────────────────────────────────────────────────
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# ── Usuario sin privilegios ──────────────────────────────────────────────────
+RUN groupadd --system workergroup && \
+    useradd  --system --gid workergroup --no-create-home workeruser
+
+# ── Dependencias del sistema mínimas ────────────────────────────────────────
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# ── Directorio de trabajo ────────────────────────────────────────────────────
+WORKDIR /worker
+
+# ── Instalar dependencias Python ─────────────────────────────────────────────
+COPY app/worker/requirements.txt /worker/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# ── Copiar código del worker ──────────────────────────────────────────────────
+COPY app/worker/ /worker/
+
+# ── Permisos ─────────────────────────────────────────────────────────────────
+RUN chown -R workeruser:workergroup /worker
+
+# ── Cambiar a usuario sin privilegios ────────────────────────────────────────
+USER workeruser
+
+# ── HEALTHCHECK — verifica que el proceso Python sigue vivo ──────────────────
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+    CMD python3 -c "import os; os.kill(1, 0)" || exit 1
+
+# ── Punto de entrada ──────────────────────────────────────────────────────────
+CMD ["python", "worker.py"]

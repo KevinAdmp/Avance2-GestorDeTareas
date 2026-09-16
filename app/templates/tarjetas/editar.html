@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Editar — {{ tarjeta.titulo }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <a href="{{ url_for('tarjetas.detalle', tablero_id=tablero.id, tarjeta_id=tarjeta.id) }}"
+       class="text-muted small">← Volver</a>
+    <h2 class="mt-1 mb-3">Editar tarjeta</h2>
+    <div class="card p-4">
+      <form method="POST">
+        <div class="mb-3">
+          <label for="titulo" class="form-label">Título</label>
+          <input type="text" id="titulo" name="titulo" class="form-control"
+                 value="{{ tarjeta.titulo }}" required />
+        </div>
+        <div class="mb-3">
+          <label for="descripcion" class="form-label">Descripción</label>
+          <textarea id="descripcion" name="descripcion" class="form-control"
+                    rows="3">{{ tarjeta.descripcion }}</textarea>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="estado" class="form-label">Estado</label>
+            <select id="estado" name="estado" class="form-select">
+              {% for val, label in [('pendiente','Pendiente'),('en_progreso','En progreso'),('completada','Completada')] %}
+                <option value="{{ val }}" {% if tarjeta.estado == val %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col">
+            <label for="prioridad" class="form-label">Prioridad</label>
+            <select id="prioridad" name="prioridad" class="form-select">
+              {% for val, label in [('baja','Baja'),('media','Media'),('alta','Alta')] %}
+                <option value="{{ val }}" {% if tarjeta.prioridad == val %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="fecha_limite" class="form-label">Fecha límite</label>
+          <input type="datetime-local" id="fecha_limite" name="fecha_limite"
+                 class="form-control"
+                 value="{{ tarjeta.fecha_limite.strftime('%Y-%m-%dT%H:%M') if tarjeta.fecha_limite else '' }}" />
+        </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          <a href="{{ url_for('tarjetas.detalle', tablero_id=tablero.id, tarjeta_id=tarjeta.id) }}"
+             class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

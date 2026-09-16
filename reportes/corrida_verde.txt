@@ -1,0 +1,26 @@
+[ETAPA-1 LINT] Iniciando análisis estático...
+WARNING: You are using pip version 21.2.4; however, version 26.0.1 is available.
+You should consider upgrading via the '/Users/kevinmorales/Desktop/Kevin Morales/TecMilenio/7MO Semestre/Tecnologias de la Info. de la vanguardia /Avance 2/.venv/bin/python3 -m pip install --upgrade pip' command.
+[ETAPA-1 LINT] Ejecutando Flake8...
+[ETAPA-1 LINT] ✅ Flake8 sin errores.
+[ETAPA-1 LINT] Ejecutando Bandit...
+[main]	INFO	profile include tests: None
+[main]	INFO	profile exclude tests: None
+[main]	INFO	cli include tests: None
+[main]	INFO	cli exclude tests: None
+[main]	INFO	running on Python 3.9.6
+[text]	INFO	Text output written to file: reportes/bandit_report.txt
+[ETAPA-1 LINT] Bandit encontró 0
+0 hallazgo(s) HIGH/CRITICAL.
+pipeline/01_lint.sh: line 50: [: 0
+0: integer expression expected
+[ETAPA-1 LINT] ✅ Bandit OK — sin hallazgos HIGH/CRITICAL.
+[ETAPA-1 LINT] Etapa completada exitosamente.
+[ETAPA-2 SECRETS] Iniciando escaneo de secretos...
+WARNING: You are using pip version 21.2.4; however, version 26.0.1 is available.
+You should consider upgrading via the '/Users/kevinmorales/Desktop/Kevin Morales/TecMilenio/7MO Semestre/Tecnologias de la Info. de la vanguardia /Avance 2/.venv/bin/python3 -m pip install --upgrade pip' command.
+fatal: not a git repository (or any of the parent directories): .git
+[ETAPA-2 SECRETS] Secretos potenciales detectados: 0
+[ETAPA-2 SECRETS] ✅ Sin secretos detectados.
+[ETAPA-2 SECRETS] Etapa completada exitosamente.
+VEREDICTO: PERMITIDO — miércoles, 16 de septiembre de 2026, 10:22:38 CST

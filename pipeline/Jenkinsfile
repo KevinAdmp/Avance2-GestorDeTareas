@@ -1,0 +1,112 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Jenkinsfile — Gestor de Tareas Colaborativo
+// Pipeline declarativo con 6 etapas de seguridad + veredicto final integrado.
+// ─────────────────────────────────────────────────────────────────────────────
+pipeline {
+    agent any
+
+    environment {
+        REPORT_DIR   = "${WORKSPACE}/reportes"
+        IMAGE_NAME   = "gestor-tareas-api:${BUILD_NUMBER}"
+        APP_URL      = "http://localhost:5000"
+    }
+
+    options {
+        timestamps()
+        timeout(time: 30, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
+
+    stages {
+
+        stage('Setup') {
+            steps {
+                sh 'mkdir -p reportes'
+                echo "Build #${BUILD_NUMBER} — rama ${GIT_BRANCH}"
+            }
+        }
+
+        stage('Etapa 1 — Lint y análisis estático') {
+            steps {
+                sh 'bash pipeline/01_lint.sh'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'reportes/flake8_report.txt, reportes/bandit_report.txt',
+                                     allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Etapa 2 — Detección de secretos') {
+            steps {
+                sh 'bash pipeline/02_secrets_scan.sh'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'reportes/secrets_scan.json',
+                                     allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Etapa 3 — SCA y SBOM') {
+            steps {
+                sh 'bash pipeline/03_sca.sh'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'reportes/safety_report.json, reportes/sbom_cyclonedx.json',
+                                     allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Etapa 4 — Escaneo IaC') {
+            steps {
+                sh 'bash pipeline/04_iac_scan.sh'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'reportes/checkov_report.txt',
+                                     allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Etapa 5 — Build y escaneo de imagen') {
+            steps {
+                sh "docker build -t ${IMAGE_NAME} -f Dockerfile ."
+                sh "IMAGE_NAME=${IMAGE_NAME} bash pipeline/05_container_scan.sh"
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'reportes/trivy_report.json, reportes/trivy_report.txt',
+                                     allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Etapa 6 — Health check') {
+            steps {
+                sh 'docker compose up -d'
+                sh 'bash pipeline/06_health_check.sh'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ VEREDICTO FINAL: PERMITIDO — Pipeline en verde."
+            sh 'echo "VEREDICTO: PERMITIDO — $(date)" >> reportes/corrida_verde.txt'
+        }
+        failure {
+            echo "❌ VEREDICTO FINAL: BLOQUEADO — Pipeline en rojo."
+            sh 'echo "VEREDICTO: BLOQUEADO — $(date)" >> reportes/corrida_roja.txt'
+        }
+        always {
+            archiveArtifacts artifacts: 'reportes/**', allowEmptyArchive: true
+            sh 'docker compose down --remove-orphans || true'
+        }
+    }
+}

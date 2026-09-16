@@ -1,0 +1,7 @@
+[ETAPA-1 LINT] Iniciando análisis estático...
+WARNING: You are using pip version 21.2.4; however, version 26.0.1 is available.
+You should consider upgrading via the '/Users/kevinmorales/Desktop/Kevin Morales/TecMilenio/7MO Semestre/Tecnologias de la Info. de la vanguardia /Avance 2/.venv/bin/python3 -m pip install --upgrade pip' command.
+[ETAPA-1 LINT] Ejecutando Flake8...
+app/config.py:42:1: E305 expected 2 blank lines after class or function definition, found 0
+1     E305 expected 2 blank lines after class or function definition, found 0
+[ETAPA-1 LINT] ❌ BLOQUEADO — Flake8 encontró errores.

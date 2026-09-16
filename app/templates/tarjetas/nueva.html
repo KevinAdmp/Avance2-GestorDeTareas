@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Nueva Tarjeta — {{ tablero.nombre }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <a href="{{ url_for('tableros.detalle', tablero_id=tablero.id) }}"
+       class="text-muted small">← {{ tablero.nombre }}</a>
+    <h2 class="mt-1 mb-3">Nueva Tarjeta</h2>
+    <div class="card p-4">
+      <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="titulo" class="form-label">Título <span class="text-danger">*</span></label>
+          <input type="text" id="titulo" name="titulo" class="form-control"
+                 required maxlength="200" />
+        </div>
+        <div class="mb-3">
+          <label for="descripcion" class="form-label">Descripción</label>
+          <textarea id="descripcion" name="descripcion" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="estado" class="form-label">Estado</label>
+            <select id="estado" name="estado" class="form-select">
+              <option value="pendiente">Pendiente</option>
+              <option value="en_progreso">En progreso</option>
+              <option value="completada">Completada</option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="prioridad" class="form-label">Prioridad</label>
+            <select id="prioridad" name="prioridad" class="form-select">
+              <option value="baja">Baja</option>
+              <option value="media" selected>Media</option>
+              <option value="alta">Alta</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="fecha_limite" class="form-label">Fecha límite</label>
+          <input type="datetime-local" id="fecha_limite" name="fecha_limite"
+                 class="form-control" />
+          <div class="form-text">
+            Al guardar con fecha límite se enviará un recordatorio automático por la cola.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Asignar a</label>
+          <div class="border rounded p-2" style="max-height:140px; overflow-y:auto;">
+            {% for u in usuarios %}
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox"
+                       name="asignados" value="{{ u.id }}" id="u{{ u.id }}" />
+                <label class="form-check-label" for="u{{ u.id }}">
+                  {{ u.nombre }} <small class="text-muted">({{ u.email }})</small>
+                </label>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="adjunto" class="form-label">Adjunto (S3)</label>
+          <input type="file" id="adjunto" name="adjunto" class="form-control" />
+        </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Crear tarjeta</button>
+          <a href="{{ url_for('tableros.detalle', tablero_id=tablero.id) }}"
+             class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

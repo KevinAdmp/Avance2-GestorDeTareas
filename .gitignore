@@ -1,0 +1,65 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# .gitignore — Gestor de Tareas Colaborativo
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Credenciales y configuración sensible — NUNCA al repositorio
+.env
+*.env
+.env.*
+!.env.example
+
+# Terraform — estado local y archivos de caché
+infra/.terraform/
+infra/.terraform.lock.hcl
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
+infra/*.tfvars
+infra/*.tfvars.json
+infra/override.tf
+infra/override.tf.json
+infra/*_override.tf
+
+# Entorno virtual local
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Docker
+.docker/
+
+# Reportes generados automáticamente (se mantienen los que son entrega)
+# reportes/*.json se mantienen como evidencia
+# Solo ignorar archivos temporales de herramientas
+reportes/.tmp/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Videos grandes (se entrega enlace, no el archivo)
+video/*.mp4
+video/*.mov
+video/*.avi
+video/*.mkv

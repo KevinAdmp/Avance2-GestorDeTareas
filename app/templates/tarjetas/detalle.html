@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}{{ tarjeta.titulo }} — TaskBoard{% endblock %}
+{% block content %}
+<a href="{{ url_for('tableros.detalle', tablero_id=tablero.id) }}"
+   class="text-muted small">← {{ tablero.nombre }}</a>
+
+<div class="d-flex justify-content-between align-items-start mt-1 mb-3">
+  <h1>{{ tarjeta.titulo }}</h1>
+  <div class="d-flex gap-2">
+    <a href="{{ url_for('tarjetas.editar', tablero_id=tablero.id, tarjeta_id=tarjeta.id) }}"
+       class="btn btn-outline-primary btn-sm">Editar</a>
+    <form action="{{ url_for('tarjetas.eliminar', tablero_id=tablero.id, tarjeta_id=tarjeta.id) }}"
+          method="POST"
+          onsubmit="return confirm('¿Eliminar esta tarjeta?')">
+      <button class="btn btn-outline-danger btn-sm">Eliminar</button>
+    </form>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-8">
+    <div class="card p-3">
+      <p>{{ tarjeta.descripcion or "Sin descripción." }}</p>
+      {% if url_adjunto %}
+        <hr />
+        <p><strong>Adjunto:</strong>
+          <a href="{{ url_adjunto }}" target="_blank" rel="noopener noreferrer">
+            Descargar archivo (S3)
+          </a>
+        </p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3">
+      <dl class="mb-0">
+        <dt>Estado</dt>
+        <dd>
+          {% if tarjeta.estado == 'completada' %}
+            <span class="badge bg-success">Completada</span>
+          {% elif tarjeta.estado == 'en_progreso' %}
+            <span class="badge bg-primary">En progreso</span>
+          {% else %}
+            <span class="badge bg-secondary">Pendiente</span>
+          {% endif %}
+        </dd>
+        <dt>Prioridad</dt>
+        <dd>
+          {% if tarjeta.prioridad == 'alta' %}
+            <span class="badge bg-danger">Alta</span>
+          {% elif tarjeta.prioridad == 'media' %}
+            <span class="badge bg-warning text-dark">Media</span>
+          {% else %}
+            <span class="badge bg-secondary">Baja</span>
+          {% endif %}
+        </dd>
+        {% if tarjeta.fecha_limite %}
+          <dt>Fecha límite</dt>
+          <dd>{{ tarjeta.fecha_limite.strftime('%d/%m/%Y %H:%M') }}</dd>
+        {% endif %}
+        <dt>Asignados</dt>
+        <dd>
+          {% if tarjeta.asignaciones %}
+            {% for asig in tarjeta.asignaciones %}
+              <span class="badge bg-light text-dark border">{{ asig.usuario.nombre }}</span>
+            {% endfor %}
+          {% else %}
+            <span class="text-muted">Ninguno</span>
+          {% endif %}
+        </dd>
+        <dt>Creado</dt>
+        <dd class="text-muted small">{{ tarjeta.creado_en.strftime('%d/%m/%Y %H:%M') }}</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+{% endblock %}

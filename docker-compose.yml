@@ -1,0 +1,105 @@
+services:
+
+  # ── 0. PostgreSQL local (reemplaza RDS cuando el Learner Lab bloquea) ──────
+  db:
+    image: postgres:16.3-alpine
+    container_name: gestor_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-gestortareas}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-gestortareas}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ── 1. API Flask (contenedor propio #1) ────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gestor_api
+    restart: unless-stopped
+    ports:
+      - "5001:5000"
+    env_file:
+      - .env
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - TASK_QUEUE=recordatorios
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-gestortareas}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/salud"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # ── 2. Worker de recordatorios (contenedor propio #2) ──────────────────────
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: gestor_worker
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - TASK_QUEUE=recordatorios
+      - RECONNECT_DELAY=5
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-net
+
+  # ── 3. RabbitMQ (cola de mensajes — pieza técnica distintiva) ──────────────
+  rabbitmq:
+    image: rabbitmq:3.13.4-management-alpine
+    container_name: gestor_rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"    # protocolo AMQP
+      - "15672:15672"  # consola de administración web
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+networks:
+  app-net:
+    driver: bridge
+
+volumes:
+  rabbitmq_data:
+  postgres_data:

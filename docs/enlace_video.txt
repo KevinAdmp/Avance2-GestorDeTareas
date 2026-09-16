@@ -1,0 +1,12 @@
+Enlace al video de demostración (3-5 minutos):
+
+https://youtu.be/w-jcjTzfzBs
+
+El video muestra en este orden:
+1. La aplicación corriendo: crear un tablero, crear una tarjeta con fecha límite y asignación
+2. Los contenedores levantados: `docker compose ps` mostrando api, worker y rabbitmq
+3. El worker procesando un recordatorio (logs del worker)
+4. Los recursos S3 y RDS en la consola de AWS Academy
+5. El pipeline bloqueando (corrida roja) — se ve el hallazgo que lo detuvo
+6. La corrección del problema
+7. El pipeline permitiendo (corrida verde)
