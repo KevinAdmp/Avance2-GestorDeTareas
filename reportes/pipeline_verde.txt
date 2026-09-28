@@ -1,0 +1,128 @@
+╔══════════════════════════════════════════════════════════════╗
+║     PIPELINE DEVSECOPS — GESTOR DE TAREAS COLABORATIVO      ║
+║     CORRIDA VERDE — CÓDIGO REMEDIADO                        ║
+║     2026-09-28 02:37:00 UTC                                  ║
+╚══════════════════════════════════════════════════════════════╝
+
+Código analizado: app/worker/importar_plantilla_tarea.py (REMEDIADO)
+Remediación: pickle.loads() → json.loads() (CWE-502 eliminado)
+Base de datos: PostgreSQL RDS — gestor-tareas-db.csey27ukhrwo.us-east-1.rds.amazonaws.com
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶  ETAPA 1 — Lint y análisis estático (Flake8 + Bandit)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ETAPA-1] Ejecutando Flake8...
+✅ Flake8 sin errores.
+
+[ETAPA-1] Ejecutando Bandit...
+Run started: 2026-09-28 02:37:00
+
+Test results:
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703
+   Location: app/worker/worker.py:110
+
+>> Issue: [B104:hardcoded_bind_all_interfaces]
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605
+   Location: app/wsgi.py:12
+
+Run metrics:
+  Total issues (by severity): Low: 1  Medium: 1  High: 0
+  HIGH/CRITICAL: 0
+
+NOTA — Falsos positivos justificados:
+  B110 (worker.py:110): except:pass en cierre de conexión al Ctrl+C.
+        No es explotable — es código de limpieza al apagar.
+  B104 (wsgi.py:12): host="0.0.0.0" es necesario para que el contenedor
+        Docker reciba tráfico externo. No aplica en producción real.
+
+[ETAPA-1] Hallazgos HIGH/CRITICAL: 0
+✅ PASS — Etapa 1 completada (0 HIGH/CRITICAL).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶  ETAPA 2 — Detección de secretos (detect-secrets)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ETAPA-2] Ejecutando detect-secrets scan...
+[ETAPA-2] Secretos potenciales detectados: 0
+✅ PASS — Sin secretos en el repositorio.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶  ETAPA 3 — SCA y SBOM (Safety + CycloneDX)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ETAPA-3] Ejecutando Safety sobre app/requirements.txt...
+[ETAPA-3] Vulnerabilidades HIGH/CRITICAL en dependencias: 0
+[ETAPA-3] SBOM CycloneDX generado en reportes/sbom_cyclonedx.json
+✅ PASS — Dependencias limpias. SBOM generado.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶  ETAPA 4 — Escaneo IaC (Checkov)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ETAPA-4] Ejecutando Checkov sobre infra/...
+terraform scan results:
+Passed checks: 7, Failed checks: 0, Skipped checks: 0
+
+  ✅ CKV_AWS_54 — S3 block public policy          PASSED
+  ✅ CKV_AWS_17 — RDS not publicly accessible     PASSED
+  ✅ CKV_AWS_16 — RDS encrypted at rest           PASSED
+  ✅ CKV_AWS_19 — S3 server-side encryption       PASSED
+  ✅ CKV_AWS_21 — S3 versioning enabled           PASSED
+  ✅ CKV_AWS_18 — S3 access logging enabled       PASSED
+  ✅ CKV_AWS_20 — S3 no public READ ACL           PASSED
+
+✅ PASS — 7/7 checks de seguridad críticos pasados.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶  ETAPA 5 — Escaneo imagen Docker (Trivy)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ETAPA-5] Imagen: gestor-tareas-api:latest (python:3.12-slim-bookworm)
+[ETAPA-5] Ejecutando Trivy --ignore-unfixed...
+
+Trivy: CRITICAL=0  HIGH=0 (solo CVEs con fix disponible)
+
+NOTA — CVEs sin fix en Debian 12 (excluidos por --ignore-unfixed):
+  CVE-2025-7458  libsqlite3-0  NO FIX disponible en Debian 12
+  CVE-2026-13221 perl-base     NO FIX disponible en Debian 12
+  CVE-2026-42496 perl-base     NO FIX disponible en Debian 12
+  CVE-2026-8376  perl-base     NO FIX disponible en Debian 12
+  CVE-2023-45853 zlib1g        NO FIX disponible en Debian 12
+  Justificación: CVEs sin parche en la distro base no pueden ser
+  remediados por el desarrollador. La práctica estándar (--ignore-unfixed)
+  los excluye del umbral de bloqueo.
+
+✅ PASS — CRITICAL=0, HIGH=0 (con fix disponible). Dentro del umbral.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶  ETAPA 6 — Health check /salud
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ETAPA-6] Verificando http://localhost:5001/salud...
+[ETAPA-6] App conectada a: RDS gestor-tareas-db.csey27ukhrwo.us-east-1.rds.amazonaws.com
+[ETAPA-6] Intento 1/10 — HTTP 200
+[ETAPA-6] ✅ Servicio vivo — /salud respondió 200.
+✅ PASS — Etapa 6 completada.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RESUMEN DE ETAPAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✅ PASS  Etapa 1 — Lint y análisis estático (Flake8+Bandit)
+  ✅ PASS  Etapa 2 — Detección de secretos (detect-secrets)
+  ✅ PASS  Etapa 3 — SCA y SBOM (Safety+CycloneDX)
+  ✅ PASS  Etapa 4 — Escaneo IaC (Checkov) — 7/7 checks
+  ✅ PASS  Etapa 5 — Escaneo imagen Docker (Trivy)
+  ✅ PASS  Etapa 6 — Health check /salud (HTTP 200)
+
+  ╔════════════════════════════════════════╗
+  ║   ✅  PERMITIDO — Pipeline en verde    ║
+  ║   Las 6 etapas pasaron.               ║
+  ╚════════════════════════════════════════╝
+
+VEREDICTO: PERMITIDO — 2026-09-28 02:37:00 UTC
+Código remediado: pickle.loads() → json.loads() (CWE-502 eliminado)
+App conectada a RDS real en AWS Academy.

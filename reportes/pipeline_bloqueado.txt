@@ -1,0 +1,94 @@
+╔══════════════════════════════════════════════════════════════╗
+║     PIPELINE DEVSECOPS — GESTOR DE TAREAS COLABORATIVO      ║
+║     CORRIDA BLOQUEADA — PARCHE SIN REMEDIAR                 ║
+║     2026-09-28 02:08:12 UTC                                  ║
+╚══════════════════════════════════════════════════════════════╝
+
+Parche integrado: app/worker/importar_plantilla_tarea.py
+Motivo del análisis: Nueva funcionalidad recibida del instructor —
+  importar plantilla de tarea compartida desde la cola de mensajes.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶  ETAPA 1 — Lint y análisis estático (Flake8 + Bandit)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ETAPA-1 LINT] Ejecutando Flake8...
+✅ Flake8 sin errores.
+
+[ETAPA-1 LINT] Ejecutando Bandit...
+
+Run started: 2026-09-28 02:08:12
+
+Test results:
+
+>> Issue: [B403:blacklist] Consider possible security implications
+   associated with pickle module.
+   Severity: Low   Confidence: High
+   CWE: CWE-502 (https://cwe.mitre.org/data/definitions/502.html)
+   Location: app/worker/importar_plantilla_tarea.py:10:0
+   9  """
+   10 import pickle
+   11 import base64
+
+--------------------------------------------------
+
+>> Issue: [B301:blacklist] Pickle and modules that wrap it can be
+   unsafe when used to deserialize untrusted data, possible security issue.
+   Severity: Medium   Confidence: High
+   CWE: CWE-502 (https://cwe.mitre.org/data/definitions/502.html)
+   Location: app/worker/importar_plantilla_tarea.py:21:16
+   20
+   21     plantilla = pickle.loads(payload_bytes)
+   22
+
+--------------------------------------------------
+
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   Location: app/worker/worker.py:110:12
+
+--------------------------------------------------
+
+>> Issue: [B104:hardcoded_bind_all_interfaces] Possible binding to all interfaces.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
+   Location: app/wsgi.py:12:25
+
+--------------------------------------------------
+
+Code scanned:
+  Total lines of code: 605
+  Total lines skipped (#nosec): 0
+
+Run metrics:
+  Total issues (by severity):
+    Low:    2
+    Medium: 2
+    High:   0
+  Total issues (by confidence):
+    Medium: 1
+    High:   3
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HALLAZGO CRÍTICO DETECTADO:
+  Archivo : app/worker/importar_plantilla_tarea.py (línea 21)
+  Regla   : B301 — pickle.loads() con datos externos no confiables
+  CWE     : CWE-502 — Deserialization of Untrusted Data
+  Severidad: Medium  Confidence: High
+
+  El payload llega de un mensaje de cola (fuente externa).
+  Cualquier actor que pueda escribir en la cola puede inyectar
+  un objeto pickle malicioso y ejecutar código arbitrario en el servidor.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ETAPA-1 LINT] ❌ BLOQUEADO — Bandit encontró 2 hallazgos Medium/High (umbral: 0 Medium o superior con Confidence High).
+
+  ╔════════════════════════════════════════╗
+  ║   ❌  BLOQUEADO — Pipeline en rojo     ║
+  ║   Etapa 1 falló. Etapas 2-6: SKIP     ║
+  ╚════════════════════════════════════════╝
+
+VEREDICTO: BLOQUEADO — 2026-09-28 02:08:12 UTC
+Motivo   : Deserialización insegura con pickle.loads() en parche recibido.
+           El despliegue fue detenido antes de llegar a QA/Producción.

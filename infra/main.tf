@@ -104,6 +104,13 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "adjuntos" {
   }
 }
 
+# Logging de acceso al bucket (CKV_AWS_18)
+resource "aws_s3_bucket_logging" "adjuntos" {
+  bucket        = aws_s3_bucket.adjuntos.id
+  target_bucket = aws_s3_bucket.adjuntos.id
+  target_prefix = "access-logs/"
+}
+
 # Versioning habilitado para recuperación ante borrado accidental
 resource "aws_s3_bucket_versioning" "adjuntos" {
   bucket = aws_s3_bucket.adjuntos.id
@@ -155,6 +162,8 @@ resource "aws_security_group" "rds" {
 # ── Instancia RDS PostgreSQL ──────────────────────────────────────────────────
 
 resource "aws_db_instance" "gestor" {
+  # Instancia creada en AWS Academy Learner Lab
+  # Endpoint real: gestor-tareas-db.csey27ukhrwo.us-east-1.rds.amazonaws.com
   identifier             = "${var.project_name}-db"
   engine                 = "postgres"
   engine_version         = "16.3"

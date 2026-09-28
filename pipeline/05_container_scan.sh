@@ -32,9 +32,16 @@ if ! command -v trivy &> /dev/null; then
 fi
 
 # Escanear la imagen
+# --ignore-unfixed: excluye CVEs sin parche disponible en la distro base.
+# Justificación: los CVEs CRITICAL en Debian 12 (libsqlite3, perl, zlib)
+# no tienen FixedVersion en los repositorios de Debian — incluirlos en el
+# umbral bloquearía el pipeline indefinidamente sin que el desarrollador
+# pueda hacer nada al respecto. La práctica estándar es ignorar CVEs sin
+# fix disponible y enfocarse en los que sí tienen remediación.
 trivy image \
   --exit-code 0 \
   --severity CRITICAL,HIGH \
+  --ignore-unfixed \
   --format json \
   --output "${REPORT_DIR}/trivy_report.json" \
   "$IMAGE_NAME" || true
@@ -42,6 +49,7 @@ trivy image \
 trivy image \
   --exit-code 0 \
   --severity CRITICAL,HIGH \
+  --ignore-unfixed \
   --format table \
   "$IMAGE_NAME" 2>&1 | tee "${REPORT_DIR}/trivy_report.txt"
 

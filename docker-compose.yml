@@ -1,28 +1,7 @@
 services:
 
-  # ── 0. PostgreSQL local (reemplaza RDS cuando el Learner Lab bloquea) ──────
-  db:
-    image: postgres:16.3-alpine
-    container_name: gestor_db
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: ${DB_NAME:-gestortareas}
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app-net
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-gestortareas}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-
   # ── 1. API Flask (contenedor propio #1) ────────────────────────────────────
+  # BD: PostgreSQL RDS en AWS Academy (no hay contenedor db local)
   api:
     build:
       context: .
@@ -36,14 +15,12 @@ services:
     environment:
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
       - TASK_QUEUE=recordatorios
-      - DB_HOST=db
-      - DB_PORT=5432
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT:-5432}
       - DB_NAME=${DB_NAME:-gestortareas}
       - DB_USER=${DB_USER:-postgres}
       - DB_PASSWORD=${DB_PASSWORD}
     depends_on:
-      db:
-        condition: service_healthy
       rabbitmq:
         condition: service_healthy
     networks:
@@ -53,7 +30,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 15s
+      start_period: 20s
 
   # ── 2. Worker de recordatorios (contenedor propio #2) ──────────────────────
   worker:
@@ -102,4 +79,3 @@ networks:
 
 volumes:
   rabbitmq_data:
-  postgres_data:

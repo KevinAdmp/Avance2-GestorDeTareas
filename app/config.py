@@ -17,7 +17,7 @@ class Config:
     DB_PASSWORD = os.environ.get("DB_PASSWORD", "GestorPass2024!")
 
     SQLALCHEMY_DATABASE_URI = (
-        f"postgresql://{DB_USER}:{DB_PASSWORD}"
+        f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}"
         f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False

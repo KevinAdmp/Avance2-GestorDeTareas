@@ -1,143 +1,314 @@
 {
-  "bomFormat": "CycloneDX",
-  "specVersion": "1.5",
-  "serialNumber": "urn:uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "version": 1,
-  "metadata": {
-    "timestamp": "2026-09-15T19:05:55Z",
-    "tools": [
-      {
-        "vendor": "CycloneDX",
-        "name": "cyclonedx-py",
-        "version": "4.4.3"
-      }
-    ],
-    "component": {
-      "type": "application",
-      "name": "gestor-tareas-colaborativo",
-      "version": "1.0.0",
-      "description": "Gestor de tareas colaborativo — Avance 2 LSCA2314"
-    }
-  },
   "components": [
     {
-      "type": "library",
+      "bom-ref": "requirements-L1",
+      "description": "requirements line 1: Flask==3.0.3",
+      "externalReferences": [
+        {
+          "comment": "implicit dist url",
+          "type": "distribution",
+          "url": "https://pypi.org/simple/Flask/"
+        }
+      ],
       "name": "Flask",
-      "version": "3.0.3",
       "purl": "pkg:pypi/flask@3.0.3",
-      "licenses": [{ "license": { "id": "BSD-3-Clause" } }]
+      "type": "library",
+      "version": "3.0.3"
     },
     {
-      "type": "library",
-      "name": "Flask-SQLAlchemy",
-      "version": "3.1.1",
-      "purl": "pkg:pypi/flask-sqlalchemy@3.1.1",
-      "licenses": [{ "license": { "id": "BSD-3-Clause" } }]
-    },
-    {
-      "type": "library",
+      "bom-ref": "requirements-L3",
+      "description": "requirements line 3: Flask-Login==0.6.3",
+      "externalReferences": [
+        {
+          "comment": "implicit dist url",
+          "type": "distribution",
+          "url": "https://pypi.org/simple/Flask-Login/"
+        }
+      ],
       "name": "Flask-Login",
-      "version": "0.6.3",
       "purl": "pkg:pypi/flask-login@0.6.3",
-      "licenses": [{ "license": { "id": "MIT" } }]
+      "type": "library",
+      "version": "0.6.3"
     },
     {
+      "bom-ref": "requirements-L2",
+      "description": "requirements line 2: Flask-SQLAlchemy==3.1.1",
+      "externalReferences": [
+        {
+          "comment": "implicit dist url",
+          "type": "distribution",
+          "url": "https://pypi.org/simple/Flask-SQLAlchemy/"
+        }
+      ],
+      "name": "Flask-SQLAlchemy",
+      "purl": "pkg:pypi/flask-sqlalchemy@3.1.1",
       "type": "library",
+      "version": "3.1.1"
+    },
+    {
+      "bom-ref": "requirements-L4",
+      "description": "requirements line 4: Flask-WTF==1.2.1",
+      "externalReferences": [
+        {
+          "comment": "implicit dist url",
+          "type": "distribution",
+          "url": "https://pypi.org/simple/Flask-WTF/"
+        }
+      ],
       "name": "Flask-WTF",
-      "version": "1.2.1",
       "purl": "pkg:pypi/flask-wtf@1.2.1",
-      "licenses": [{ "license": { "id": "BSD-3-Clause" } }]
+      "type": "library",
+      "version": "1.2.1"
     },
     {
-      "type": "library",
+      "bom-ref": "requirements-L5",
+      "description": "requirements line 5: WTForms==3.1.2",
+      "externalReferences": [
+        {
+          "comment": "implicit dist url",
+          "type": "distribution",
+          "url": "https://pypi.org/simple/WTForms/"
+        }
+      ],
       "name": "WTForms",
-      "version": "3.1.2",
       "purl": "pkg:pypi/wtforms@3.1.2",
-      "licenses": [{ "license": { "id": "BSD-3-Clause" } }]
+      "type": "library",
+      "version": "3.1.2"
     },
     {
-      "type": "library",
-      "name": "psycopg2-binary",
-      "version": "2.9.9",
-      "purl": "pkg:pypi/psycopg2-binary@2.9.9",
-      "licenses": [{ "license": { "id": "LGPL-3.0-only" } }]
-    },
-    {
-      "type": "library",
-      "name": "boto3",
-      "version": "1.34.144",
-      "purl": "pkg:pypi/boto3@1.34.144",
-      "licenses": [{ "license": { "id": "Apache-2.0" } }]
-    },
-    {
-      "type": "library",
-      "name": "pika",
-      "version": "1.3.2",
-      "purl": "pkg:pypi/pika@1.3.2",
-      "licenses": [{ "license": { "id": "BSD-3-Clause" } }]
-    },
-    {
-      "type": "library",
-      "name": "python-dotenv",
-      "version": "1.0.1",
-      "purl": "pkg:pypi/python-dotenv@1.0.1",
-      "licenses": [{ "license": { "id": "BSD-3-Clause" } }]
-    },
-    {
-      "type": "library",
+      "bom-ref": "requirements-L10",
+      "description": "requirements line 10: Werkzeug==3.0.3",
+      "externalReferences": [
+        {
+          "comment": "implicit dist url",
+          "type": "distribution",
+          "url": "https://pypi.org/simple/Werkzeug/"
+        }
+      ],
       "name": "Werkzeug",
-      "version": "3.0.3",
       "purl": "pkg:pypi/werkzeug@3.0.3",
-      "licenses": [{ "license": { "id": "BSD-3-Clause" } }]
+      "type": "library",
+      "version": "3.0.3"
     },
     {
+      "bom-ref": "requirements-L7",
+      "description": "requirements line 7: boto3==1.34.144",
+      "externalReferences": [
+        {
+          "comment": "implicit dist url",
+          "type": "distribution",
+          "url": "https://pypi.org/simple/boto3/"
+        }
+      ],
+      "name": "boto3",
+      "purl": "pkg:pypi/boto3@1.34.144",
       "type": "library",
+      "version": "1.34.144"
+    },
+    {
+      "bom-ref": "requirements-L11",
+      "description": "requirements line 11: gunicorn==22.0.0",
+      "externalReferences": [
+        {
+          "comment": "implicit dist url",
+          "type": "distribution",
+          "url": "https://pypi.org/simple/gunicorn/"
+        }
+      ],
       "name": "gunicorn",
-      "version": "22.0.0",
       "purl": "pkg:pypi/gunicorn@22.0.0",
-      "licenses": [{ "license": { "id": "MIT" } }]
+      "type": "library",
+      "version": "22.0.0"
     },
     {
+      "bom-ref": "requirements-L8",
+      "description": "requirements line 8: pika==1.3.2",
+      "externalReferences": [
+        {
+          "comment": "implicit dist url",
+          "type": "distribution",
+          "url": "https://pypi.org/simple/pika/"
+        }
+      ],
+      "name": "pika",
+      "purl": "pkg:pypi/pika@1.3.2",
       "type": "library",
-      "name": "SQLAlchemy",
-      "version": "2.0.31",
-      "purl": "pkg:pypi/sqlalchemy@2.0.31",
-      "licenses": [{ "license": { "id": "MIT" } }]
+      "version": "1.3.2"
     },
     {
+      "bom-ref": "requirements-L6",
+      "description": "requirements line 6: psycopg2-binary==2.9.9",
+      "externalReferences": [
+        {
+          "comment": "implicit dist url",
+          "type": "distribution",
+          "url": "https://pypi.org/simple/psycopg2-binary/"
+        }
+      ],
+      "name": "psycopg2-binary",
+      "purl": "pkg:pypi/psycopg2-binary@2.9.9",
       "type": "library",
-      "name": "botocore",
-      "version": "1.34.144",
-      "purl": "pkg:pypi/botocore@1.34.144",
-      "licenses": [{ "license": { "id": "Apache-2.0" } }]
+      "version": "2.9.9"
     },
     {
+      "bom-ref": "requirements-L9",
+      "description": "requirements line 9: python-dotenv==1.0.1",
+      "externalReferences": [
+        {
+          "comment": "implicit dist url",
+          "type": "distribution",
+          "url": "https://pypi.org/simple/python-dotenv/"
+        }
+      ],
+      "name": "python-dotenv",
+      "purl": "pkg:pypi/python-dotenv@1.0.1",
       "type": "library",
-      "name": "Jinja2",
-      "version": "3.1.4",
-      "purl": "pkg:pypi/jinja2@3.1.4",
-      "licenses": [{ "license": { "id": "BSD-3-Clause" } }]
-    },
-    {
-      "type": "library",
-      "name": "MarkupSafe",
-      "version": "2.1.5",
-      "purl": "pkg:pypi/markupsafe@2.1.5",
-      "licenses": [{ "license": { "id": "BSD-3-Clause" } }]
-    },
-    {
-      "type": "library",
-      "name": "click",
-      "version": "8.1.7",
-      "purl": "pkg:pypi/click@8.1.7",
-      "licenses": [{ "license": { "id": "BSD-3-Clause" } }]
-    },
-    {
-      "type": "library",
-      "name": "itsdangerous",
-      "version": "2.2.0",
-      "purl": "pkg:pypi/itsdangerous@2.2.0",
-      "licenses": [{ "license": { "id": "BSD-3-Clause" } }]
+      "version": "1.0.1"
     }
-  ]
+  ],
+  "dependencies": [
+    {
+      "ref": "requirements-L1"
+    },
+    {
+      "ref": "requirements-L10"
+    },
+    {
+      "ref": "requirements-L11"
+    },
+    {
+      "ref": "requirements-L2"
+    },
+    {
+      "ref": "requirements-L3"
+    },
+    {
+      "ref": "requirements-L4"
+    },
+    {
+      "ref": "requirements-L5"
+    },
+    {
+      "ref": "requirements-L6"
+    },
+    {
+      "ref": "requirements-L7"
+    },
+    {
+      "ref": "requirements-L8"
+    },
+    {
+      "ref": "requirements-L9"
+    }
+  ],
+  "metadata": {
+    "timestamp": "2026-09-28T02:22:08.376736+00:00",
+    "tools": {
+      "components": [
+        {
+          "description": "CycloneDX Software Bill of Materials (SBOM) generator for Python projects and environments",
+          "externalReferences": [
+            {
+              "type": "build-system",
+              "url": "https://github.com/CycloneDX/cyclonedx-python/actions"
+            },
+            {
+              "type": "distribution",
+              "url": "https://pypi.org/project/cyclonedx-bom/"
+            },
+            {
+              "type": "documentation",
+              "url": "https://cyclonedx-bom-tool.readthedocs.io/"
+            },
+            {
+              "type": "issue-tracker",
+              "url": "https://github.com/CycloneDX/cyclonedx-python/issues"
+            },
+            {
+              "type": "license",
+              "url": "https://github.com/CycloneDX/cyclonedx-python/blob/main/LICENSE"
+            },
+            {
+              "type": "release-notes",
+              "url": "https://github.com/CycloneDX/cyclonedx-python/blob/main/CHANGELOG.md"
+            },
+            {
+              "type": "vcs",
+              "url": "https://github.com/CycloneDX/cyclonedx-python/"
+            },
+            {
+              "type": "website",
+              "url": "https://github.com/CycloneDX/cyclonedx-python/#readme"
+            }
+          ],
+          "group": "CycloneDX",
+          "licenses": [
+            {
+              "license": {
+                "acknowledgement": "declared",
+                "id": "Apache-2.0"
+              }
+            }
+          ],
+          "name": "cyclonedx-py",
+          "type": "application",
+          "version": "7.4.0"
+        },
+        {
+          "description": "Python library for CycloneDX",
+          "externalReferences": [
+            {
+              "type": "build-system",
+              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/actions"
+            },
+            {
+              "type": "distribution",
+              "url": "https://pypi.org/project/cyclonedx-python-lib/"
+            },
+            {
+              "type": "documentation",
+              "url": "https://cyclonedx-python-library.readthedocs.io/"
+            },
+            {
+              "type": "issue-tracker",
+              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/issues"
+            },
+            {
+              "type": "license",
+              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/blob/main/LICENSE"
+            },
+            {
+              "type": "release-notes",
+              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/blob/main/CHANGELOG.md"
+            },
+            {
+              "type": "vcs",
+              "url": "https://github.com/CycloneDX/cyclonedx-python-lib"
+            },
+            {
+              "type": "website",
+              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/#readme"
+            }
+          ],
+          "group": "CycloneDX",
+          "licenses": [
+            {
+              "license": {
+                "acknowledgement": "declared",
+                "id": "Apache-2.0"
+              }
+            }
+          ],
+          "name": "cyclonedx-python-lib",
+          "type": "library",
+          "version": "11.12.0"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:ac766884-6a28-47e9-89ad-d82125f90acb",
+  "version": 1,
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6"
 }

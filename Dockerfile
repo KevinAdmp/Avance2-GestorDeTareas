@@ -1,5 +1,6 @@
 # ── Imagen base: versión fija, slim para reducir superficie de ataque ────────
-FROM python:3.12.4-slim
+# python:3.12-slim-bookworm — Debian 12 con parches de seguridad actualizados
+FROM python:3.12-slim-bookworm
 
 # Metadatos
 LABEL maintainer="kevin.morales@tecmilenio.mx"
