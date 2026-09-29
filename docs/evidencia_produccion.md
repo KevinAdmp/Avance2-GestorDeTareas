@@ -20,23 +20,27 @@
 
 ---
 
-## Instancia de QA
+## Instancia de QA (EC2)
 
-- **Tipo:** Ambiente local Docker + RDS AWS Academy
-- **BD:** `gestor-tareas-db.csey27ukhrwo.us-east-1.rds.amazonaws.com`
+- **Instance ID:** `i-04b7e403ebf90aa44`
+- **Nombre:** `gestor-tareas-qa`
+- **IP pública:** `34.229.86.30`
+- **Tipo:** t2.micro · us-east-1
+- **URL health check:** `http://34.229.86.30:5001/salud` → HTTP 200 ✅
 - **Contenedores:** `gestor_api`, `gestor_worker`, `gestor_rabbitmq`
-- **Health check:** `http://localhost:5001/salud` → HTTP 200 ✅
+- **BD:** `gestor-tareas-db.csey27ukhrwo.us-east-1.rds.amazonaws.com` (RDS AWS Academy)
 
 ---
 
 ## Instancia de Producción (EC2)
 
-- **Instance ID:** [COMPLETAR con tu instance ID de AWS]
-- **IP pública:** [COMPLETAR con la IP pública de tu EC2]
-- **URL de la app:** `http://[IP-EC2]:5001/salud`
-- **Tipo:** t2.micro (o el que hayas elegido)
-- **Región:** us-east-1
-- **BD:** Misma RDS — `gestor-tareas-db.csey27ukhrwo.us-east-1.rds.amazonaws.com`
+- **Instance ID:** `i-0c0ccca6659181ce1`
+- **Nombre:** `gestor-tareas-produccion`
+- **IP pública:** `98.84.159.9`
+- **Tipo:** t2.micro · us-east-1
+- **URL health check:** `http://98.84.159.9:5001/salud` → HTTP 200 ✅
+- **Contenedores:** `gestor_api`, `gestor_worker`, `gestor_rabbitmq`
+- **BD:** `gestor-tareas-db.csey27ukhrwo.us-east-1.rds.amazonaws.com` (misma RDS)
 
 ---
 

@@ -11,7 +11,7 @@
 | Matrícula | [COMPLETAR] |
 | Tema | 5 — Gestor de tareas colaborativo |
 | Enlace al repositorio Git (con commit de remediación) | https://github.com/KevinAdmp/Avance2-GestorDeTareas |
-| Enlace o IP de instancia de Producción | http://[IP-EC2]:5001 |
+| Enlace o IP de instancia de Producción | http://98.84.159.9:5001 (i-0c0ccca6659181ce1) |
 
 ---
 
