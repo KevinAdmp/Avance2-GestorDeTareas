@@ -1,82 +1,48 @@
-# Clasificación del Hallazgo de Seguridad
-**Proyecto:** Gestor de Tareas Colaborativo — Tema 5  
-**Autor:** Kevin Morales  
-**Fecha:** 2026-09-28  
-**Parche analizado:** `app/worker/importar_plantilla_tarea.py`
+# Clasificación del Hallazgo
+**Autor:** Kevin Adrian Morales Palomo  
+**Fecha:** 28 de septiembre de 2026  
+**Archivo:** `app/worker/importar_plantilla_tarea.py`
 
 ---
 
-## Hallazgo
+## Qué encontré
 
-| Campo | Detalle |
-|---|---|
-| **Archivo** | `app/worker/importar_plantilla_tarea.py`, línea 21 |
-| **Regla Bandit** | B301 — `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data |
-| **Regla adicional** | B403 — `import pickle` (importación de módulo inseguro) |
-| **CWE** | [CWE-502 — Deserialization of Untrusted Data](https://cwe.mitre.org/data/definitions/502.html) |
-| **Herramienta** | Bandit 1.7.9 |
-| **Confianza** | High |
+Bandit detectó dos problemas en el parche recibido:
 
-### Código afectado
+- **B403** en línea 10: importación del módulo `pickle`
+- **B301** en línea 21: uso de `pickle.loads()` con datos que vienen de la cola
+
+El código problemático es este:
 
 ```python
-# app/worker/importar_plantilla_tarea.py  líneas 19-21
-payload_codificado = mensaje_cola["Body"]
 payload_bytes = base64.b64decode(payload_codificado)
-plantilla = pickle.loads(payload_bytes)   # ← VULNERABILIDAD
+plantilla = pickle.loads(payload_bytes)
 ```
 
-El mensaje llega de la cola RabbitMQ (`mensaje_cola["Body"]`). Ese cuerpo es una fuente externa — cualquier actor que pueda publicar en la cola puede controlar el contenido del payload.
+El dato `payload_codificado` viene de `mensaje_cola["Body"]` — es decir, del cuerpo de un mensaje de RabbitMQ. Eso es una fuente externa que cualquiera puede controlar si tiene acceso a la cola.
 
 ---
 
 ## Tipo de falla
 
-**Deserialización insegura de datos no confiables (CWE-502).**
+**Deserialización insegura — CWE-502**
 
-El módulo `pickle` de Python puede ejecutar código arbitrario durante la deserialización. A diferencia de JSON, un objeto pickle no es solo datos — es un flujo de instrucciones que el intérprete ejecuta. Si el payload está controlado por un atacante, puede contener instrucciones `__reduce__` que invoquen `os.system`, `subprocess`, o cualquier llamada al sistema con los privilegios del proceso worker.
-
-Ejemplo de exploit mínimo:
-```python
-import pickle, os, base64
-
-class Exploit(object):
-    def __reduce__(self):
-        return (os.system, ("rm -rf /data",))
-
-payload = base64.b64encode(pickle.dumps(Exploit())).decode()
-# Publicar este payload en la cola → el worker lo ejecuta
-```
+El problema con `pickle` es que no solo lee datos, ejecuta instrucciones. Cuando haces `pickle.loads()` con un objeto que alguien más construyó, ese objeto puede tener un método `__reduce__` que corre cualquier comando del sistema. No es una vulnerabilidad teórica — con menos de 10 líneas de Python se puede armar un payload que ejecute lo que sea en el servidor.
 
 ---
 
 ## Severidad
 
-**Alta (High)**
+Le di severidad **Alta**, aunque Bandit la reporta como Medium.
 
-| Dimensión | Evaluación |
-|---|---|
-| **Impacto** | Ejecución de código arbitrario con los privilegios del proceso worker dentro del contenedor. Un atacante puede leer secretos de entorno, destruir datos, o pivotar a otros servicios en la red Docker. |
-| **Facilidad de explotación** | Alta — no requiere autenticación. Solo necesita acceso de escritura a la cola RabbitMQ. En el setup actual, RabbitMQ expone el puerto 5672 con credenciales por defecto (`guest:guest`), lo que hace el exploit trivial desde la red local. |
-| **Alcance** | El worker corre en su propio contenedor, pero comparte la red `app-net` con la API y RabbitMQ. Un compromiso del worker permite movimiento lateral. |
+Bandit hace análisis estático y no sabe si el dato es interno o externo. En este caso el dato viene de RabbitMQ, que en el setup actual tiene credenciales por defecto (`guest:guest`) y el puerto 5672 abierto. Cualquiera en la red puede publicar mensajes. Eso hace que el exploit sea trivial, no teórico.
 
-> Bandit lo reporta como `Severity: Medium` porque su clasificación es estática y no considera el contexto de ejecución (datos externos vs. internos). En este caso, el payload viene de la cola — una fuente completamente externa — lo que eleva la severidad real a **Alta**.
+El impacto también es alto: si alguien explota esto puede leer las variables de entorno del contenedor (donde están las llaves de AWS y la contraseña de RDS), borrar datos, o moverse a otros contenedores en la misma red Docker.
 
 ---
 
-## ¿Es un falso positivo?
+## ¿Es falso positivo?
 
-**No.**
+No. Verifiqué manualmente que `mensaje_cola["Body"]` viene directo del mensaje de la cola sin ninguna validación previa. No hay firma, no hay autenticación, no hay lista blanca. El hallazgo es real.
 
-Se confirmó manualmente que:
-1. El campo `mensaje_cola["Body"]` proviene directamente del mensaje de RabbitMQ — dato externo no validado.
-2. No existe ninguna capa de autenticación ni firma criptográfica en el mensaje antes de la deserialización.
-3. El exploit demostrado arriba se ejecuta tal cual si se publica en la cola.
-
-Bandit reporta Medium en lugar de High porque su análisis es estático y no traza el origen del dato. En el contexto real de esta aplicación, la severidad correcta es **Alta**.
-
----
-
-## Resumen ejecutivo
-
-El parche recibido introduce una función que deserializa con `pickle.loads()` datos provenientes de la cola de mensajes RabbitMQ. Cualquier actor con acceso a la cola puede publicar un payload malicioso y ejecutar código arbitrario en el servidor worker. El pipeline de CI/CD detectó el hallazgo en la Etapa 1 (Bandit B301, CWE-502) y bloqueó el despliegue antes de que el código llegara al ambiente de QA o Producción.
+Los otros dos hallazgos que marcó Bandit (B110 y B104) sí los consideré falsos positivos porque son del código original y no son explotables en este contexto — los detallo en la respuesta al incidente.
